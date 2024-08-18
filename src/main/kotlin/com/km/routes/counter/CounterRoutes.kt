@@ -1,6 +1,6 @@
 package com.km.routes.counter
 
-import com.km.repository.ExposedCounterRepository
+import com.km.routes.common.RouteResponse.Companion.ok
 import com.km.service.DefaultCounterService
 import io.github.smiley4.ktorswaggerui.dsl.route
 import io.ktor.http.*
@@ -12,9 +12,7 @@ import kotlinx.serialization.Serializable
 
 fun Route.counterRoutes() {
 
-  val counterService = DefaultCounterService(
-    counterRepository = ExposedCounterRepository()
-  )
+  val counterService = DefaultCounterService()
 
   route("/counters") {
     get("/{name}") {
@@ -22,22 +20,22 @@ fun Route.counterRoutes() {
       val read = counterService.read(name)
 
       if (read == null) {
-        call.respond(HttpStatusCode.NotFound)
+        call.respond(ok(Unit))
       } else {
-        call.respond(read)
+        call.respond(ok(read))
       }
     }
 
     get {
       val allCounters = counterService.getAll()
-      call.respond(allCounters)
+      call.respond(ok(allCounters))
     }
 
     delete("/{name}") {
       val name = call.parameters["name"] ?: throw IllegalStateException("Name parameter must be provided")
       counterService.delete(name)
 
-      call.respond(HttpStatusCode.OK)
+      call.respond(ok(Unit))
     }
 
     post("/{name}/increment") {
@@ -45,7 +43,7 @@ fun Route.counterRoutes() {
 
       val newValue = counterService.incrementAndGetValue(name)
 
-      call.respond(newValue)
+      call.respond(ok(newValue))
     }
 
     post {
@@ -56,7 +54,7 @@ fun Route.counterRoutes() {
         value = request.value,
       )
 
-      call.respond(id)
+      call.respond(ok(id))
     }
   }
 

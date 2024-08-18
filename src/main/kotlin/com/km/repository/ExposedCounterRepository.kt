@@ -1,15 +1,13 @@
 package com.km.repository
 
+import com.km.config.dbCall
 import com.km.model.Counter
-import com.km.model.Counters
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
+import com.km.repository.entity.Counters
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.deleteWhere
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.selectAll
-import org.jetbrains.exposed.sql.transactions.transaction
 import org.jetbrains.exposed.sql.update
 
 class ExposedCounterRepository : CounterRepository {
@@ -28,6 +26,13 @@ class ExposedCounterRepository : CounterRepository {
       .singleOrNull()
   }
 
+  override suspend fun getValueByName(name: String): Int = dbCall {
+    Counters.selectAll()
+      .where { Counters.name eq name }
+      .map { it[Counters.value] }
+      .first()
+  }
+
   override suspend fun deleteByName(name: String): Int = dbCall {
     Counters.deleteWhere { Counters.name eq name }
   }
@@ -38,20 +43,20 @@ class ExposedCounterRepository : CounterRepository {
     }
   }
 
+  override suspend fun existsByName(name: String) = dbCall {
+    Counters.selectAll()
+      .where { Counters.name eq name }
+      .count() > 0
+  }
+
   override suspend fun getAll(): Collection<Counter> = dbCall {
     Counters.selectAll()
       .map { toCounter(it) }
   }
 
-  private fun toCounter(it: ResultRow) = Counter(
-    id = it[Counters.id],
-    name = it[Counters.name],
-    value = it[Counters.value]
+  private fun toCounter(row: ResultRow) = Counter(
+    id = row[Counters.id],
+    name = row[Counters.name],
+    value = row[Counters.value]
   )
-
-  private suspend fun <T> dbCall(
-    block: () -> T
-  ): T = withContext(Dispatchers.IO) {
-    transaction { block() }
-  }
 }

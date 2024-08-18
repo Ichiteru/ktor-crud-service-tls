@@ -2,9 +2,10 @@ package com.km.service
 
 import com.km.model.Counter
 import com.km.repository.CounterRepository
+import com.km.repository.ExposedCounterRepository
 
 class DefaultCounterService(
-  private val counterRepository: CounterRepository,
+  private val counterRepository: CounterRepository = ExposedCounterRepository(),
 ) : CounterService {
 
   override suspend fun create(name: String, value: Int): Long {
@@ -12,6 +13,13 @@ class DefaultCounterService(
       name = name,
       value = value
     )
+
+    val existsByName = counterRepository.existsByName(name)
+
+    if (existsByName) {
+      throw IllegalArgumentException("Counter with name = $name already exists")
+    }
+
     return counterRepository.save(counter)
   }
 
@@ -29,7 +37,9 @@ class DefaultCounterService(
 
     val newValue = counter.value.plus(1)
 
-    return counterRepository.updateValueByName(counter.name, newValue)
+    counterRepository.updateValueByName(counter.name, newValue)
+
+    return counterRepository.getValueByName(name)
   }
 
   override suspend fun getAll(): Collection<Counter> {

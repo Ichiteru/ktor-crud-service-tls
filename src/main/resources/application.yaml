@@ -1,0 +1,20 @@
+ktor:
+  application:
+    modules:
+      - com.km.ApplicationKt.module
+  deployment:
+    sslPort: 8443
+    port: 8080
+  security:
+    ssl:
+      keyStore: keystore.jks
+      keyAlias: sampleAlias
+      keyStorePassword: 123456
+      privateKeyPassword: foobar
+  db:
+    driverClassName: "org.h2.Driver"
+    jdbcUrl: "jdbc:h2:mem:test"
+    maximumPoolSize: "5"
+    isAutoCommit: "false"
+    transactionIsolation: "TRANSACTION_REPEATABLE_READ"
+

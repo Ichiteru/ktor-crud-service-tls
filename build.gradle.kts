@@ -26,6 +26,17 @@ repositories {
   mavenCentral()
 }
 
+//sourceSets {
+//  main {
+//    kotlin {
+//      srcDir("src/main/kotlin")
+//    }
+//    resources {
+//      srcDir("src/main/resources")
+//    }
+//  }
+//}
+
 dependencies {
   implementation("io.ktor:ktor-server-core-jvm")
   implementation("io.ktor:ktor-server-webjars-jvm")
@@ -39,6 +50,8 @@ dependencies {
   implementation("io.ktor:ktor-server-netty-jvm")
   implementation("org.flywaydb:flyway-core:$flyway_version")
   implementation("io.ktor:ktor-server-status-pages:$ktor_version")
+  implementation("io.ktor:ktor-network-tls-certificates:$ktor_version")
+  implementation("io.ktor:ktor-server-config-yaml:$ktor_version")
   implementation("com.zaxxer:HikariCP:$hikari_version")
   implementation("ch.qos.logback:logback-classic:$logback_version")
   testImplementation("io.ktor:ktor-server-test-host-jvm")
