@@ -1,18 +1,20 @@
-ktor-counter-crud-service
+# ktor-counter-crud-service
 
-Stack:
+## Stack:
 * Kotlin 2.0.10
 * Ktor 2.3.12
 * H2 in-memory database
 * Exposed JB
+* Hikari CP
+* Swagger UI
 
-Links:
+## Links:
 * Http url:  http://0.0.0.0:8080
 * Https url:  https://0.0.0.0:8443/
 * Swagger http url: http://0.0.0.0:8080/swagger
 * Swagger https url: https://0.0.0.0:8443/swagger
 
-Examples: 
+## Request examples: 
 
 - Create new counter
 
@@ -42,7 +44,7 @@ curl --location --request POST 'https://localhost:8443/counters/{name}/increment
 curl --location --request DELETE 'https://localhost:8443/counters/{name}'
 ```
 
-To create new self-signed jks file with certificate keys, launch next code:
+### To create new self-signed jks file with certificate keys, launch next code:
 ```
         val keyStoreFile = File("build/keystore.jks")
         val keyStore = buildKeyStore {
