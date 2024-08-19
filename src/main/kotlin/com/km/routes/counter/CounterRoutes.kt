@@ -2,7 +2,6 @@ package com.km.routes.counter
 
 import com.km.routes.common.RouteResponse.Companion.ok
 import com.km.service.DefaultCounterService
-import io.github.smiley4.ktorswaggerui.dsl.route
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.request.*
@@ -15,6 +14,7 @@ fun Route.counterRoutes() {
   val counterService = DefaultCounterService()
 
   route("/counters") {
+
     get("/{name}") {
       val name = call.parameters["name"] ?: throw IllegalStateException("Name parameter must be provided")
       val read = counterService.read(name)
@@ -54,7 +54,7 @@ fun Route.counterRoutes() {
         value = request.value,
       )
 
-      call.respond(ok(id))
+      call.respond(HttpStatusCode.Created, ok(id))
     }
   }
 

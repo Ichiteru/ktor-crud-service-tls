@@ -1,0 +1,101 @@
+openapi: "3.0.3"
+info:
+  title: "JSON API"
+  description: "A JSON API that allows you to communicate with counter-service"
+  version: "1.0.0"
+servers:
+  - url: "https://0.0.0.0:8443"
+  - url: "http://0.0.0.0:8080"
+paths:
+  /counters:
+    get:
+      description: "Returns all counters"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ResponseEntity"
+    post:
+      description: "Creates a new counter"
+      requestBody:
+        description: "A JSON object containing counter information"
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateCounterRequest"
+      responses:
+        "201":
+          description: "Created"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResponseEntity"
+  /counters/{name}:
+    delete:
+      description: "Remove counter by its name"
+      parameters:
+        - name: "name"
+          in: "path"
+          required: true
+          schema:
+            type: "string"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ResponseEntity"
+    get:
+      description: "Returns a counter by its name"
+      parameters:
+        - name: "name"
+          in: "path"
+          required: true
+          schema:
+            type: "string"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ResponseEntity"
+  /counters/{name}/increment:
+    post:
+      description: "Increment counter and returns new value"
+      parameters:
+        - name: "name"
+          in: "path"
+          required: true
+          schema:
+            type: "string"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResponseEntity"
+components:
+  schemas:
+    ResponseEntity:
+      type: "object"
+      properties:
+        body:
+          type: object
+          nullable: true
+        errorMessage:
+          type: string
+          nullable: true
+    CreateCounterRequest:
+      type: "object"
+      properties:
+        name:
+          type: "string"
+        value:
+          type: "integer"
+          format: "int32"
