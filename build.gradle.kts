@@ -25,17 +25,6 @@ repositories {
   mavenCentral()
 }
 
-//sourceSets {
-//  main {
-//    kotlin {
-//      srcDir("src/main/kotlin")
-//    }
-//    resources {
-//      srcDir("src/main/resources")
-//    }
-//  }
-//}
-
 dependencies {
   implementation("io.ktor:ktor-server-core-jvm")
   implementation("io.ktor:ktor-server-content-negotiation-jvm")
