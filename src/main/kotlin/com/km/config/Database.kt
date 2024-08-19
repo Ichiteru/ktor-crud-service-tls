@@ -38,15 +38,3 @@ suspend fun <T> dbCall(
 ): T = withContext(Dispatchers.IO) {
   transaction { block() }
 }
-
-//private fun runFlyway(datasource: DataSource) {
-//  val flyway = Flyway.configure().dataSource(datasource).load()
-//  try {
-//    flyway.info()
-//    flyway.migrate()
-//  } catch (e: Exception) {
-//    log.error("Exception running flyway migration", e)
-//    throw e
-//  }
-//  log.info("Flyway migration has finished")
-//}
